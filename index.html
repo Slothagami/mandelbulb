@@ -30,6 +30,12 @@
             input[type=number] {
                 background-color: #ffffff10;
             }
+
+            #seed-options {
+                display: none;
+                margin: 0;
+                width: 100%;
+            }
         </style>
 
     </head>
@@ -65,14 +71,15 @@
                         </select>
                     </div>
 
-
-                    <h4 title="sets the root position for the fractal, giving different results from the same family of fractals"> Seed Position </h4>
-                    <div class="row">
-                        <input type="number" id="jpos-x" min="-2" max="2" placeholder="x">
-                        <input type="number" id="jpos-y" min="-2" max="2" placeholder="y">
-                        <input type="number" id="jpos-z" min="-2" max="2" placeholder="z">
+                    <div id="seed-options">
+                        <h4 title="sets the root position for the fractal, giving different results from the same family of fractals"> Seed Position </h4>
+                        <div class="row">
+                            <input type="number" id="jpos-x" min="-2" max="2" placeholder="x">
+                            <input type="number" id="jpos-y" min="-2" max="2" placeholder="y">
+                            <input type="number" id="jpos-z" min="-2" max="2" placeholder="z">
+                        </div>
+                        <button id="randomize" onclick="randomSet()"> Random Position </button>
                     </div>
-                    <button id="randomize" onclick="randomSet()"> Random Position </button>
 
                     <h4 title="Changes the appearance of the fractal. Press [Space] to animate"> Set Exponent <span class="preview" id="exp-prev">2</span> </h4>
                     <input type="range" id="exponent" min="-9" max="9" step=".01" value="2">

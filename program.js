@@ -21,10 +21,18 @@ const clamp  = (val, min, max) => Math.min(Math.max(val, min), max)
 const rand   = (min, max) => Math.random() * (max - min) + min
 const choice = (arr) => arr[Math.round(Math.random() * (arr.length - 1))]
 
-var power_slider, power_prev, camera_option
+var power_slider, power_prev, camera_optionm, jpx, jpy, jpz
 function setup() {
     let canvas = document.querySelector("canvas")
     
+    jpx = document.getElementById("jpos-x")
+    jpy = document.getElementById("jpos-y")
+    jpz = document.getElementById("jpos-z")
+
+    jpx.addEventListener("input", () => {update_seed(jpx, 0)})
+    jpy.addEventListener("input", () => {update_seed(jpy, 1)})
+    jpz.addEventListener("input", () => {update_seed(jpz, 2)})
+
     camera_option = document.getElementById("camera-mode")
     power_prev   = document.getElementById("exp-prev")
     power_slider = document.getElementById("exponent")
@@ -76,7 +84,15 @@ function render() {
     power_prev.innerText = round(power)
 
     move_camera()
-    animate_power()    
+    animate_power()
+
+    // show seed options if needed
+    let seed_section = document.getElementById("seed-options")
+    if(shader_ids[shader_id].includes("j")) {
+        seed_section.style.display = "block"
+    } else {
+        seed_section.style.display = "none"
+    }
 
     // update uniforms
     gl.uniformVec2("uRotation", rotation)
@@ -161,6 +177,10 @@ function zoom_camera(e) {
 
     let direction = Math.sign(e.deltaY)
     cameraPos = move(rotation, direction * 8)
+}
+
+function update_seed(value, cordinate) {
+    juliaPos[cordinate] = value.value
 }
 
 // Utility
