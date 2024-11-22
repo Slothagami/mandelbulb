@@ -91,7 +91,7 @@ const fragment = `
         float dr = 1.;
         float r;
 
-        for(int i = 0; i < 20; i++) {
+        for(int i = 0; i < 25; i++) {
             r = length(z);
             if(r > 2.) break;
 
@@ -116,7 +116,7 @@ const fragment = `
         float dr = 1.;
         float r;
 
-        for(int i = 0; i < 20; i++) {
+        for(int i = 0; i < 25; i++) {
             r = length(z);
             if(r > 2.) break;
 
@@ -141,7 +141,7 @@ const fragment = `
         float dr = 1.;
         float r;
 
-        for(int i = 0; i < 20; i++) {
+        for(int i = 0; i < 25; i++) {
             r = length(z);
             if(r > 2.) break;
 
@@ -166,7 +166,7 @@ const fragment = `
         float dr = 1.;
         float r;
 
-        for(int i = 0; i < 20; i++) {
+        for(int i = 0; i < 25; i++) {
             r = length(z);
             if(r > 2.) break;
 
