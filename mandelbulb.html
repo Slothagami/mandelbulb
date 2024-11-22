@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Mandelbulb Shaders </title>
+        <link rel="stylesheet" href="https://slothagami.github.io/style.css">
+
+        <script src="wgl.js"></script>
+        <script src="mandelbulb_shaders.js"></script>
+        <script src="program.js"></script>
+
+        <link rel="shortcut icon" type="image/x-icon" href="https://slothagami.github.io/favicon.ico?v=2">
+        <link rel="stylesheet" href="https://slothagami.github.io/interactive.css">
+        <link rel="stylesheet" href="https://slothagami.github.io/interactive/interactive.css">
+
+        <!-- Math rendering -->
+        <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+        <style>
+            button {
+                margin: 2em auto;
+            }
+
+            .row {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            input[type=number] {
+                background-color: #ffffff10;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div id="bigrow">
+            <canvas id="render"></canvas>
+
+            <div id="content">
+                
+                <p id="date"> Nov 22 2024 </p>
+                <h1> Mandelbulb Fractals </h1>
+                
+                <div id="settings">
+                    <span class="preview" id="julia-prev"></span>
+                    
+                    <div class="row">
+                        <h4 title="Choose the fractal to generate. Completely changes the output."> Fractal </h4>
+                        <select id="selected-fractal">
+                            <option value="mandelbulb"> Mandelbulb </option>
+                            <option value="jbulb">      Julia Bulb </option>
+                            <option value="alt_mandelbulb"> Mandelbulb 2 </option>
+                            <option value="alt_jbulb">      Julia Bulb 2 </option>
+                            <option value="mandelbox"> Mandelbox </option>
+                            <option value="jbox">     Julia Box </option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <h4 title="Press [E] to toggle camera mode"> Camera Mode </h4>
+                        <select id="camera-mode">
+                            <option value="orbit">   Orbit </option>
+                            <option value="freecam"> Freecam </option>
+                        </select>
+                    </div>
+
+
+                    <h4 title="sets the root position for the fractal, giving different results from the same family of fractals"> Seed Position </h4>
+                    <div class="row">
+                        <input type="number" id="jpos-x" min="-2" max="2" placeholder="x">
+                        <input type="number" id="jpos-y" min="-2" max="2" placeholder="y">
+                        <input type="number" id="jpos-z" min="-2" max="2" placeholder="z">
+                    </div>
+                    <button id="randomize" onclick="randomSet()"> Random Position </button>
+
+                    <h4 title="Changes the appearance of the fractal. Press [Space] to animate"> Set Exponent <span class="preview" id="exp-prev">2</span> </h4>
+                    <input type="range" id="exponent" min="-9" max="9" step=".01" value="2">
+
+                    <button id="screenshot" title="Press [Q] to save a screenshot" onclick="screenshot()"> Save Image </button>
+                </div>
+    
+                <p>Drag to pan, WASD to move camera</p>
+            </div>
+        </div>
+    </body>
+</html>

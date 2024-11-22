@@ -21,24 +21,37 @@ const clamp  = (val, min, max) => Math.min(Math.max(val, min), max)
 const rand   = (min, max) => Math.random() * (max - min) + min
 const choice = (arr) => arr[Math.round(Math.random() * (arr.length - 1))]
 
+var power_slider, power_prev, camera_option
 function setup() {
+    let canvas = document.querySelector("canvas")
+    
+    camera_option = document.getElementById("camera-mode")
+    power_prev   = document.getElementById("exp-prev")
+    power_slider = document.getElementById("exponent")
+
+    power_slider.addEventListener("input", e => {
+        power = parseFloat(get_parameter("exponent"))
+        animatePower = false
+    })
+    camera_option.addEventListener("change", () => {
+        if(camera_option.value == "orbit") {
+            freeFlyMode = false
+        } else {
+            freeFlyMode = true
+        }
+    })
+    
     use_fractal("alt_jbulb")
     randomSet()
 
-    console.log(`
-        power: exponent of set
-        seedPos: julia set position (use randomSet() to explore)
-        animRange: min and max animated power
-        fractalType
-        cameraMode
-
-    `)
+    console.log(`use variable animRange to change the extent of the animation`)
 
     window.addEventListener("keyup",     e => {keys[e.key] = false})
     window.addEventListener("keydown",   keypress)
-    window.addEventListener("mousedown", e => {mousedown = true })
-    window.addEventListener("mouseup",   e => {mousedown = false})
-    window.addEventListener("mousemove", rotate_camera)
+    canvas.addEventListener("mousedown", e => {mousedown = true })
+    canvas.addEventListener("mouseup",   e => {mousedown = false})
+    canvas.addEventListener("mousemove", rotate_camera)
+    window.addEventListener("wheel", zoom_camera)
     window.addEventListener("resize",    e => {
         // resize canvas
         canv.width  = window.innerWidth
@@ -58,6 +71,10 @@ function setup() {
 function render() {
     fov = lerp(fov, target_fov, .2)
 
+    // update parameters
+    use_fractal(get_parameter("selected-fractal"))
+    power_prev.innerText = round(power)
+
     move_camera()
     animate_power()    
 
@@ -74,8 +91,8 @@ function render() {
     requestAnimationFrame(render)
 }
 
+const move = (angle, dir) => add(cameraPos, normal(angle, dir * moveSpd))
 function move_camera() {
-    var move = (angle, dir) => add(cameraPos, normal(angle, dir * moveSpd))
     if(keys.w) cameraPos = move(rotation, -1)
     if(keys.s) cameraPos = move(rotation, 1)
 
@@ -128,17 +145,41 @@ function keypress(e) {
         
         case "q": screenshot();                 break
         case "e": freeFlyMode  = !freeFlyMode;  break
-        case " ": animatePower = !animatePower; break
+        case " ": 
+            if(animatePower) {
+                animatePower = false
+                power_slider.value = power
+            } else {
+                animatePower = true
+            }
+            break
     }
 }
 
+function zoom_camera(e) {
+    if(freeFlyMode) return
+
+    let direction = Math.sign(e.deltaY)
+    cameraPos = move(rotation, direction * 8)
+}
+
 // Utility
+function get_parameter(name) {
+    let element = document.getElementById(name)
+    return element.value
+}
+
 function randomSet(range=1.4) {
     juliaPos = [
         rand(-range, range), 
         rand(-range, range), 
         rand(-range, range)
     ]
+    
+    // update fields
+    document.getElementById("jpos-x").value = juliaPos[0]
+    document.getElementById("jpos-y").value = juliaPos[1]
+    document.getElementById("jpos-z").value = juliaPos[2]
 }
 
 function use_fractal(name) {
@@ -170,4 +211,8 @@ function screenshot() {
     document.body.appendChild(a)
     a.click()
     setTimeout(() => {document.body.removeChild(a)}, 0)
+}
+
+function round(n, dp=2) {
+    return Math.round(n * 10**dp)/(10**dp)
 }
